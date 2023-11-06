@@ -1,0 +1,11 @@
+FROM postgres:16-alpine
+
+ENV POSTGRES_USER=user
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_DB=database
+
+EXPOSE 5432
+
+VOLUME [ "/data" ]
+
+CMD ["postgres"]

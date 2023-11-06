@@ -8,7 +8,7 @@ app = FastAPI()
 
 # Configura la connessione al database
 engine = create_async_engine(
-    "postgresql://user:password@host:port/database",
+    "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
     echo=True,
 )
 
