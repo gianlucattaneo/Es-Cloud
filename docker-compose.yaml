@@ -13,5 +13,18 @@ services:
       POSTGRES_PASSWORD: mypassword
     volumes:
       - db_volume:/var/lib/postgresql/data
+    networks:
+      - retee
+
+  flask:
+    build: .
     ports:
-      - "5432:5432"
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - retee
+
+networks:
+  retee:
+  
