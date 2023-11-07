@@ -10,4 +10,4 @@ COPY app.py .
 # Default di Flask
 EXPOSE 5000
 
-CMD ["Flask run"]
+CMD ["python", "app.py"]

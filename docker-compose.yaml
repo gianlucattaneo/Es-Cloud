@@ -1,8 +1,5 @@
 version: '3.8'
 
-volumes:
-  db_volume:
-
 services:
   db:
     image: postgres
@@ -13,6 +10,8 @@ services:
       POSTGRES_PASSWORD: mypassword
     volumes:
       - db_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - retee
 
@@ -27,4 +26,6 @@ services:
 
 networks:
   retee:
-  
+
+volumes:
+  db_volume:
