@@ -12,15 +12,23 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
+cur.execute(''' 
+CREATE TABLE IF NOT EXISTS Persona (
+    id serial PRIMARY KEY,
+    Nome text,
+    Cognome text
+);
+''')
+
 @app.route('/data', methods=['GET'])
 def get_data():
-    cur.execute("SELECT * FROM my_table")
+    cur.execute("SELECT * FROM Persona")
     data = cur.fetchall()
     return jsonify(data)
 
 @app.route('/data/<int:id>', methods=['GET'])
 def get_single_data(id):
-    cur.execute("SELECT * FROM my_table WHERE id = %s", (id,))
+    cur.execute("SELECT * FROM Persona WHERE id = %s", (id,))
     data = cur.fetchone()
     return jsonify(data)
 
@@ -28,21 +36,21 @@ def get_single_data(id):
 def create_data():
     # Assumi che i dati siano inviati come JSON
     new_data = request.get_json()
-    cur.execute("INSERT INTO my_table (column1, column2) VALUES (%s, %s)", (new_data['value1'], new_data['value2']))
+    cur.execute("INSERT INTO Persona (Nome, Cognome) VALUES (%s, %s)", (new_data['value1'], new_data['value2']))
     conn.commit()
     return jsonify({'message': 'Data created'})
 
 @app.route('/data/<int:id>', methods=['PUT'])
 def update_data(id):
     updated_data = request.get_json()
-    cur.execute("UPDATE my_table SET column1 = %s, column2 = %s WHERE id = %s",
+    cur.execute("UPDATE Persona SET Nome = %s, Cognome = %s WHERE id = %s",
                 (updated_data['value1'], updated_data['value2'], id))
     conn.commit()
     return jsonify({'message': 'Data updated'})
 
 @app.route('/data/<int:id>', methods=['DELETE'])
 def delete_data(id):
-    cur.execute("DELETE FROM my_table WHERE id = %s", (id,))
+    cur.execute("DELETE FROM Persona WHERE id = %s", (id,))
     conn.commit()
     return jsonify({'message': 'Data deleted'})
 

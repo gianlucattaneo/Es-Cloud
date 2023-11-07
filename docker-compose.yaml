@@ -1,5 +1,8 @@
 version: '3.8'
 
+volumes:
+  db_volume:
+
 services:
   db:
     image: postgres
