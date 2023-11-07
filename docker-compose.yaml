@@ -1,19 +1,14 @@
 version: '3.8'
 
 services:
-  app:
-    image: fastapi-app:latest
-    build:
-      context: .
-      dockerfile: Dockerfile-App
-    environment:
-      - DATABASE_URL=postgresql://user:password@host:port/database
-    depends_on:
-      - db
-
   db:
-    image: postgres:16-alpine
+    image: postgres
+    restart: always
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=database
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

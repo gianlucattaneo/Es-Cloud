@@ -1,63 +1,50 @@
-from fastapi import FastAPI
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
-from pydantic import BaseModel
+from flask import Flask, request, jsonify
+import psycopg2
 
-# Crea l'applicazione FastAPI
-app = FastAPI()
+app = Flask(__name__)
 
-# Configura la connessione al database
-engine = create_async_engine(
-    "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
-    echo=True,
+# Connessione al database
+conn = psycopg2.connect(
+    dbname='mydatabase',
+    user='myuser',
+    password='mypassword',
+    host='localhost'
 )
+cur = conn.cursor()
 
-# Crea il sessione
-Session = sessionmaker(engine, expire_on_commit=False)
+@app.route('/data', methods=['GET'])
+def get_data():
+    cur.execute("SELECT * FROM my_table")
+    data = cur.fetchall()
+    return jsonify(data)
 
-# Crea il modello di dati
-class Person(BaseModel):
-    id: int
-    name: str
-    age: int
+@app.route('/data/<int:id>', methods=['GET'])
+def get_single_data(id):
+    cur.execute("SELECT * FROM my_table WHERE id = %s", (id,))
+    data = cur.fetchone()
+    return jsonify(data)
 
-# Definisci i metodi CRUD
+@app.route('/data', methods=['POST'])
+def create_data():
+    # Assumi che i dati siano inviati come JSON
+    new_data = request.get_json()
+    cur.execute("INSERT INTO my_table (column1, column2) VALUES (%s, %s)", (new_data['value1'], new_data['value2']))
+    conn.commit()
+    return jsonify({'message': 'Data created'})
 
-@app.get("/persons")
-async def get_persons():
-    with Session() as session:
-        persons = session.query(Person).all()
-    return persons
+@app.route('/data/<int:id>', methods=['PUT'])
+def update_data(id):
+    updated_data = request.get_json()
+    cur.execute("UPDATE my_table SET column1 = %s, column2 = %s WHERE id = %s",
+                (updated_data['value1'], updated_data['value2'], id))
+    conn.commit()
+    return jsonify({'message': 'Data updated'})
 
-@app.get("/persons/{id}")
-async def get_person(id: int):
-    with Session() as session:
-        person = session.query(Person).get(id)
-    return person
+@app.route('/data/<int:id>', methods=['DELETE'])
+def delete_data(id):
+    cur.execute("DELETE FROM my_table WHERE id = %s", (id,))
+    conn.commit()
+    return jsonify({'message': 'Data deleted'})
 
-@app.post("/persons")
-async def create_person(person: Person):
-    with Session() as session:
-        session.add(person)
-        session.commit()
-    return person
-
-@app.put("/persons/{id}")
-async def update_person(id: int, person: Person):
-    with Session() as session:
-        person_in_db = session.query(Person).get(id)
-        person_in_db.update(person)
-        session.commit()
-    return person
-
-@app.delete("/persons/{id}")
-async def delete_person(id: int):
-    with Session() as session:
-        person = session.query(Person).get(id)
-        session.delete(person)
-        session.commit()
-    return {"message": "Person deleted"}
-
-# Avvia l'applicazione
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
