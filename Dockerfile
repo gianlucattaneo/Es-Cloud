@@ -2,12 +2,11 @@ FROM python:3.9-alpine
 
 WORKDIR /app/
 
-COPY requirements.txt .
+COPY /res/. .
 RUN pip install -r requirements.txt
-
-COPY app.py .
 
 # Default di Flask
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+#CMD ["python", "app.py"]
+CMD ["flask", "run", "--host=0.0.0.0"]

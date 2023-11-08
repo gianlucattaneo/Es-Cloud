@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import psycopg2
+import time
 
 app = Flask(__name__)
 
@@ -12,12 +13,27 @@ def connect(host):
         port= 5432
     )
 
-# Connessione al database
-try:
-    conn = connect('db')
-except:
-    conn = connect('localhost')
+def retry(times, wait_time, host):
+    i = 0
 
+    # X Test in locale
+    try:
+        conn = connect('localhost')
+    except:
+        conn = None
+
+    while i <= times: 
+        try:
+            conn = connect(host)
+        except:
+            i += 1
+            time.sleep(wait_time)
+        else:
+            break
+
+    return conn
+
+conn = retry(times=5, wait_time=1, host='db')
 cur = conn.cursor()
 
 cur.execute(''' 
