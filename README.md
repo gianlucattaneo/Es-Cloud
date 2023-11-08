@@ -4,11 +4,11 @@
 L'API fornisce operazioni CRUD (Create, Read, Update, Delete) per la tabella "Persona" in un database PostgreSQL. Utilizza Flask come framework per gestire le richieste HTTP e Psycopg2 come driver per PostgreSQL per effettuare le operazioni sul database.
 
 ## Build / Deploy
-Il solo comando utilizzato è ```docker compose up -d``` dato che il processo di building dell'immagine della API viene eseguito automaticamente al suo interno (è necessario che il Dockerfile sia nella stessa directory del file ``` docker-compose.yml ``` ).
+Il solo comando utilizzato è `docker compose up -d` dato che il processo di building dell'immagine della API viene eseguito automaticamente al suo interno (è necessario che il Dockerfile sia nella stessa directory del file `docker-compose.yml ` ).
 
 ## Utilizzo 
 ### Tramite Python 
- E' possibile utlizzare il programma all'interno della cartella **/sender** eseguendo prima il comando ```pip install -r requirements.txt``` e poi eseguendo ```python req_sender.py```
+ E' possibile utlizzare il programma all'interno della cartella **/sender** eseguendo prima il comando `pip install -r requirements.txt` e poi eseguendo `python req_sender.py`
 
 ### Tramite Postman
 E' possibile andare ad eseguire richieste HTTP all'API come descritto in seguito
