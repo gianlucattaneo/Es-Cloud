@@ -33,7 +33,7 @@ def retry(times, wait_time, host):
 
     return conn
 
-conn = retry(times=5, wait_time=1, host='db')
+conn = retry(times=10, wait_time=3, host='db')
 cur = conn.cursor()
 
 cur.execute(''' 

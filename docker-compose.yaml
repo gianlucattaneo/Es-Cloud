@@ -13,6 +13,11 @@ services:
       - db_volume:/var/lib/postgresql/data
     networks:
       - retee
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '256M' 
 
   flask:
     container_name: flask_container
@@ -23,6 +28,11 @@ services:
       - db
     networks:
       - retee
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '256M'
 
 networks:
   retee:
