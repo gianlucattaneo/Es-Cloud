@@ -60,7 +60,7 @@ def get_single_data(id):
 def create_data():
     # Assumi che i dati siano inviati come JSON
     new_data = request.get_json()
-    cur.execute("INSERT INTO Persona (Nome, Cognome) VALUES (%s, %s)", (new_data['value1'], new_data['value2']))
+    cur.execute("INSERT INTO Persona (Nome, Cognome) VALUES (%s, %s)", (new_data['Nome'], new_data['Cognome']))
     conn.commit()
     return jsonify({'message': 'Data created'})
 
@@ -68,7 +68,7 @@ def create_data():
 def update_data(id):
     updated_data = request.get_json()
     cur.execute("UPDATE Persona SET Nome = %s, Cognome = %s WHERE id = %s",
-                (updated_data['value1'], updated_data['value2'], id))
+                (updated_data['Nome'], updated_data['Cognome'], id))
     conn.commit()
     return jsonify({'message': 'Data updated'})
 
