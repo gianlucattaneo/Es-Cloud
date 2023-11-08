@@ -3,14 +3,21 @@ import psycopg2
 
 app = Flask(__name__)
 
+def connect(host):
+    return psycopg2.connect(
+        dbname='mydatabase',
+        user='myuser',
+        password='mypassword',
+        host=host,
+        port= 5432
+    )
+
 # Connessione al database
-conn = psycopg2.connect(
-    dbname='mydatabase',
-    user='myuser',
-    password='mypassword',
-    host='db',
-    port= 5432
-)
+try:
+    conn = connect('db')
+except:
+    conn = connect('localhost')
+
 cur = conn.cursor()
 
 cur.execute(''' 
@@ -56,4 +63,4 @@ def delete_data(id):
     return jsonify({'message': 'Data deleted'})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

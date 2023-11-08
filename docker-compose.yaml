@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   db:
+    container_name: db_container
     image: postgres
     restart: always
     environment:
@@ -16,6 +17,7 @@ services:
       - retee
 
   flask:
+    container_name: flask_container
     build: .
     ports:
       - "5000:5000"
@@ -26,6 +28,7 @@ services:
 
 networks:
   retee:
+    driver: bridge
 
 volumes:
   db_volume:
