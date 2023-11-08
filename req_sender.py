@@ -39,6 +39,6 @@ if __name__ == '__main__':
                 print('DELETE data:', response.json())
                 
             case _:
-                break
+                stop = True
 
         input("Press Enter to continue...")
